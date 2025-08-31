@@ -1,70 +1,52 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
   <title>💀 HACKED! 💀</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     body {
-      background: black;
+      background-color: black;
       color: red;
+      text-align: center;
       font-family: "Courier New", monospace;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-      margin:0;
-      text-align:center;
+      margin-top: 20%;
     }
-    h1 { font-size: 40px; }
-    .hidden { display:none; }
-    .hacked {
-      background:black;
-      color:#ff2b2b;
-      font-size:28px;
+    h1 {
+      font-size: 50px;
       animation: blink 1s infinite;
     }
-    @keyframes blink {0%{opacity:1}50%{opacity:0}100%{opacity:1}}
+    p {
+      font-size: 24px;
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
   </style>
 </head>
-<body onclick="startHack()">
-  <div id="startScreen">
-    <h1>⚠️ Tap Anywhere to Continue</h1>
-  </div>
-  <div id="hackScreen" class="hidden hacked">
-    <h1>💀 YOUR PHONE IS HACKED! 💀</h1>
-    <p>All your data belongs to me 😎</p>
-  </div>
-
+<body>
+  <h1>💀 YOUR PHONE IS HACKED! 💀</h1>
+  <p>All your data belongs to me 😎</p>
   <audio id="alarm" loop>
     <source src="https://www.soundjay.com/button/beep-10.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    function startHack() {
-      // Force fullscreen if supported
-      let el = document.documentElement;
-      if (el.requestFullscreen) el.requestFullscreen();
-      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-
-      // Switch screens
-      document.getElementById("startScreen").classList.add("hidden");
-      document.getElementById("hackScreen").classList.remove("hidden");
-
-      // Start vibration
-      if (navigator.vibrate) {
-        navigator.vibrate([300,150,300,150,600,200,400]);
-        setInterval(()=>{navigator.vibrate([300,150,300,150,600]);},2000);
-      }
-
-      // Play alarm
-      document.getElementById("alarm").play();
-
-      // Chain of alerts
-      setTimeout(()=>alert("⚠️ Virus Downloading..."), 1000);
-      setTimeout(()=>alert("⚠️ Sending Data to Hacker..."), 2500);
-      setTimeout(()=>alert("😈 You Are Owned!"), 4000);
+    // Repeat vibration every 3 seconds
+    if (navigator.vibrate) {
+      setInterval(() => {
+        navigator.vibrate([300, 150, 300, 150, 600]);
+      }, 3000);
     }
+
+    // Scary alerts
+    setTimeout(() => { alert("⚠️ Virus Downloading..."); }, 2000);
+    setTimeout(() => { alert("⚠️ Sending Data to Hacker..."); }, 4000);
+    setTimeout(() => { alert("😈 You Are Owned!"); }, 6000);
+
+    // Play alarm sound
+    document.getElementById("alarm").play();
   </script>
 </body>
 </html>
