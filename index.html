@@ -5,121 +5,65 @@
   <title>💀 HACKED! 💀</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    html,body { height:100%; margin:0; }
     body {
-      background: #000;
-      color: #ff2b2b;
+      background: black;
+      color: red;
       font-family: "Courier New", monospace;
       display:flex;
-      flex-direction:column;
-      align-items:center;
       justify-content:center;
+      align-items:center;
+      height:100vh;
+      margin:0;
       text-align:center;
     }
-    h1 { font-size: clamp(28px, 8vw, 54px); animation: blink 1s infinite; margin:0 1rem; }
-    p { font-size: clamp(14px, 4vw, 20px); margin: 1rem 1rem 2rem; }
-    @keyframes blink { 0%{opacity:1} 50%{opacity:0} 100%{opacity:1} }
-
-    .controls {
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      justify-content:center;
+    h1 { font-size: 40px; }
+    .hidden { display:none; }
+    .hacked {
+      background:black;
+      color:#ff2b2b;
+      font-size:28px;
+      animation: blink 1s infinite;
     }
-    button {
-      background:#222;
-      color:#ff6b6b;
-      border:2px solid #ff6b6b;
-      padding:12px 20px;
-      font-size:16px;
-      border-radius:10px;
-      cursor:pointer;
-    }
-    button.secondary { background:transparent; color:#fff; border-color:#fff; }
-    small { color:#aaa; display:block; margin-top:8px; }
+    @keyframes blink {0%{opacity:1}50%{opacity:0}100%{opacity:1}}
   </style>
 </head>
-<body>
-  <h1>💀 YOUR PHONE IS HACKED! 💀</h1>
-  <p>All your data belongs to me 😎</p>
-
-  <div class="controls">
-    <button id="panicBtn">Stop Malware</button>
-    <button id="stopBtn" class="secondary">Allow Access</button>
+<body onclick="startHack()">
+  <div id="startScreen">
+    <h1>⚠️ Tap Anywhere to Continue</h1>
   </div>
-  <small id="status">Vibration: <span id="vstat">unknown</span> · Audio: available</small>
+  <div id="hackScreen" class="hidden hacked">
+    <h1>💀 YOUR PHONE IS HACKED! 💀</h1>
+    <p>All your data belongs to me 😎</p>
+  </div>
 
-  <!-- small alarm sound - replace with your own if you want -->
   <audio id="alarm" loop>
-    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+    <source src="https://www.soundjay.com/button/beep-10.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    const panicBtn = document.getElementById('panicBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const alarm = document.getElementById('alarm');
-    const vstat = document.getElementById('vstat');
+    function startHack() {
+      // Force fullscreen if supported
+      let el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
 
-    // Check vibration support
-    const canVibrate = 'vibrate' in navigator;
-    vstat.textContent = canVibrate ? 'supported' : 'not supported';
+      // Switch screens
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("hackScreen").classList.remove("hidden");
 
-    // A dramatic vibration pattern (ms): vibrate, pause, vibrate, long vibrate...
-    // This will be repeated by re-triggering if needed.
-    const pattern = [300, 150, 300, 150, 600, 200, 400];
-
-    let vibrationInterval = null;
-
-    function startVibeAndAlarm() {
-      // Play audio (may require a user gesture, hence button)
-      try { 
-        alarm.currentTime = 0;
-        const playPromise = alarm.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(()=>{/* autoplay blocked — gesture required */}
-          );
-        }
-      } catch(e){/* ignore */}
-      
-      // Single vibrate call
-      if (canVibrate) {
-        navigator.vibrate(pattern);
-        // Repeat pattern every 1500ms to keep it dramatic on browsers that do not loop
-        if (vibrationInterval) clearInterval(vibrationInterval);
-        vibrationInterval = setInterval(()=>{ navigator.vibrate(pattern); }, 1500);
+      // Start vibration
+      if (navigator.vibrate) {
+        navigator.vibrate([300,150,300,150,600,200,400]);
+        setInterval(()=>{navigator.vibrate([300,150,300,150,600]);},2000);
       }
-    }
 
-    function stopVibeAndAlarm() {
-      // stop audio
-      try { alarm.pause(); } catch(e){}
-      // stop vibration
-      if (canVibrate) {
-        navigator.vibrate(0); // cancels current vibration
-      }
-      if (vibrationInterval) {
-        clearInterval(vibrationInterval);
-        vibrationInterval = null;
-      }
-    }
+      // Play alarm
+      document.getElementById("alarm").play();
 
-    // Button handlers — guarantees a user gesture so audio/vibration will work in most browsers
-    panicBtn.addEventListener('click', () => {
-      startVibeAndAlarm();
-      // show staged alerts for the prank effect
-      setTimeout(()=> alert('⚠️ Virus Downloading...'), 700);
-      setTimeout(()=> alert('⚠️ Sending Data to Hacker...'), 1800);
-      setTimeout(()=> alert('😈 You are owned!'), 3200);
-    });
-
-    stopBtn.addEventListener('click', () => {
-      stopVibeAndAlarm();
-      alert('Stopped. You are safe 😉');
-    });
-
-    // Optional: try to vibrate once on load (may or may not work depending on browser)
-    if (canVibrate) {
-      try { navigator.vibrate([120,80,120]); } catch(e){}
+      // Chain of alerts
+      setTimeout(()=>alert("⚠️ Virus Downloading..."), 1000);
+      setTimeout(()=>alert("⚠️ Sending Data to Hacker..."), 2500);
+      setTimeout(()=>alert("😈 You Are Owned!"), 4000);
     }
   </script>
 </body>
